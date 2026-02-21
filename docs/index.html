@@ -1,9 +1,10 @@
+<!-- index.html -->
 <!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>LoRA: The Past, Present, Future</title>
+  <title>Beyond LoRA: Is Sparsity-Induced Adaptation Better?</title>
 
   <link rel="stylesheet" href="styles.css" />
 
@@ -17,9 +18,9 @@
 
     <section class="bubble bubble-hero">
       <div class="hero-inner">
-        <h1>LoRA: The Past, Present, Future</h1>
+        <h1>Beyond LoRA: Is Sparsity-Induced Adaptation Better?</h1>
         <p class="subtitle">
-          A living research page for low-rank adaptation and cheaper structured variants.
+          A research page for sparsity-induced low-rank adaptation variants.
         </p>
         <div class="hero-links">
           <a class="pill disabled" href="#" aria-disabled="true">Paper (soon)</a>
@@ -32,29 +33,19 @@
     <section class="bubble">
       <h2>Abstract</h2>
       <p>
-        Full fine-tuning of large pre-trained models is constrained by computational and memory
-        overhead, motivating parameter-efficient fine-tuning approaches, such as low-rank
-        adaptation (LoRA) and its variants. Yet, questions remain about their convergence behavior,
-        comparative generalization, and which structural restrictions on low-rank
-        updates preserve effective adaptation performance. We present a historical framing
-        (the past: full fine-tuning and original LoRA; the present: different variants of LoRA)
-        and introduce simpler, cheaper, parameter-efficient extensions: Cheap LoRA (cLA)—training
-        a single low-rank factor with the other fixed (deterministically or, in its randomized variant,
-        stochastically)—and the chained circulant variant, c3LA, positioning cLA
-        as a structured instance of asymmetric LoRA, serving as a controlled column-subspace restriction
-        of full fine-tuning. While analyzing these LoRA variants, we realized that nonconvex convergence
-        analysis is only feasible for the variants where one low-rank factor is kept frozen; for LoRA,
-        Lipschitz smoothness of the loss function does not hold. However, we derived information-theoretic
-        generalization error bounds for all variants, which, to our knowledge, is one of the first endeavors
-        in this area. We conduct an extensive empirical study that spans 10 fine-tuning methods across 10
-        pre-trained models on diverse tasks and datasets, and dissect their performance using a multitude
-        of analytical tools, including the loss landscape of the resulting fine-tuned models, their spectral
-        properties, and generalizability. Despite the theoretical results, our experimental study suggests
-        that restricting adaptation to a structured column-subspace can remain competitive with alternative
-        fine-tuning methods, with outcomes depending on the trained model, datasets used, and other factors.
-        In summary, the performance of LoRA-based PEFT methods suggests that cheaper variants can serve as
-        effective parameter-matched baselines, offering a principled route toward cost-effective adaptation
-        and generalizable strategies.
+        Low-rank adaptation (LoRA) and its variants provide a memory- and compute-efficient alternative to full fine-tuning of pre-trained models.
+        However, questions remain about the comparative generalizability of these approaches and how the structural restrictions on low-rank updates
+        preserve effective adaptation performance. We present a historical framing, covering the past (full fine-tuning and original LoRA), the present
+        (different variants of LoRA), and propose simpler, cheaper, parameter-efficient extensions by inducing sparsity within existing LoRA variants:
+        Cheap LoRA (cLA), training a single low-rank factor with the other fixed (deterministically or, in its randomized variant, stochastically),
+        and the chained circulant variant, ${c}^3$LA. {We frame cLA as a structured instance of asymmetric LoRA, serving as a controlled column-subspace
+        restriction of full fine-tuning}. We derive information-theoretic generalization error bounds for these variants, marking one of the first endeavors
+        in this area. Empirically, <em>we evaluate 11 fine-tuning methods across 10 pre-trained models and 14 datasets, analyzing the fine-tuned models'
+        performance and generalization using tools such as loss landscapes and spectral analysis.</em> Despite the sensitivity of fine-tuned models to the
+        pre-trained model, datasets, and other factors, our study suggests that restricting LoRA-based PEFT methods' adaptation to a sparse, structured
+        columnspace remains competitive with their parameter-matched baselines while substantially reducing training time and peak GPU memory. Our theoretical
+        and empirical generalization measures provide a more consistent and principled approach to their cost-effective adaptation than commonly used
+        analytical tools.
       </p>
     </section>
 
@@ -74,6 +65,26 @@
         their randomized counterparts against parameter-matched baselines, the goal is to clarify when
         structure itself is the advantage, when randomness helps, and when full expressivity is necessary.
       </p>
+    </section>
+
+    <section class="bubble">
+      <h2>Connection to PaCA</h2>
+      <p class="muted center">
+        Figure: conceptual connection between sparsity-induced adaptation and PaCA.
+      </p>
+      <figure class="img-figure">
+        <img src="paca_connection.png" alt="Connection to PaCA" />
+      </figure>
+    </section>
+
+    <section class="bubble">
+      <h2>Generalization Error Upper Bound Theorem</h2>
+      <p class="muted center">
+        Screenshot of the theorem statement used for the information-theoretic generalization bound.
+      </p>
+      <figure class="img-figure">
+        <img src="theorem.png" alt="Generalization Error Upper Bound Theorem" />
+      </figure>
     </section>
 
     <section class="bubble">
@@ -172,7 +183,7 @@ Return adapted layer W</code></pre>
 
     <section class="bubble bubble-footer">
       <div class="footer-row">
-        <span>© <span id="year"></span> LoRA: The Past, Present, Future</span>
+        <span>© <span id="year"></span> Beyond LoRA</span>
         <span class="muted">Hosted on GitHub Pages</span>
       </div>
     </section>

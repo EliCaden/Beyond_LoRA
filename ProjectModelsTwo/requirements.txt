@@ -1,0 +1,15 @@
+# Core deep learning
+torch>=2.1.0
+
+# Hugging Face stack
+transformers>=4.40.0
+datasets>=2.18.0
+tokenizers>=0.15.0
+accelerate>=0.27.0
+
+# DeBERTa-v2/v3 tokenizer requires sentencepiece
+sentencepiece>=0.1.99
+protobuf>=3.20.0
+
+# Parquet loading for OpenBookQA
+pyarrow>=14.0.0

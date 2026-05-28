@@ -1,5 +1,5 @@
 # deberta_trainer.py
-# Unified DeBERTa trainer (v3-base + v2-xxlarge) with your printing rules.
+# Unified DeBERTa trainer (v3-base + v2-xxlarge).
 #
 # Printing:
 # - Start: "Run beginning with model: ..., dataset: ..., method: ..., ..." in the required order
@@ -56,7 +56,7 @@ def _canonicalize_dataset(name: str) -> str:
     if n in {"sts-b", "sts_b", "stsb"}:
         return "stsb"
 
-    # your v2xxl allowed list sometimes includes mrpcs
+    # Canonicalize legacy MRPC spelling.
     if n == "mrpcs":
         return "mrpc"
 
@@ -68,8 +68,8 @@ def _is_regression_task(task: str) -> bool:
 
 
 def _glue_has_public_test_labels(task: str) -> bool:
-    # Per your printing rule + practical GLUE reality:
-    # - GLUE test labels are hidden for many tasks; you explicitly want no test printing for:
+    # GLUE test labels are hidden for several tasks:
+    # - Do not print test metrics for:
     #   rte, sst2, stsb
     t = _canonicalize_dataset(task)
     return t not in {"rte", "sst2", "stsb"}
@@ -697,7 +697,7 @@ class ModestWrapper(nn.Module):
             task_type=task_type,
             num_classes=num_classes,
             make_adapter=make_adapter,
-            head_fc_trainable=True,  # matches your v2xxl modest script
+            head_fc_trainable=True,
             freeze_encoder=True,
         )
 

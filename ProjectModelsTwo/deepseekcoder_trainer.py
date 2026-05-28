@@ -23,11 +23,11 @@ Hard requirements implemented:
   - alpha default: if alpha==0 => alpha = 2 * rank
   - NO early stopper (not even commented)
 
-Important convention fix (per your note):
+Convention fix:
   - chainReset is interpreted as COUNT-BASED for reset-capable methods:
       exactly `chainReset` resets spread evenly over training (epochs 2..epochs),
       not "every N epochs".
-    This matches the count-based `np.linspace(...)` style used in your Modest TREC50 script.
+    This matches the count-based `np.linspace(...)` style used by the Modest TREC50 script.
 """
 
 import math

@@ -1,0 +1,34 @@
+# Python caches
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Experiment outputs
+runs/
+outputs/
+checkpoints/
+wandb/
+logs/
+*.pt
+*.pth
+*.ckpt
+
+# Data/cache folders
+data/
+datasets/
+.cache/
+
+# OS/editor files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Local environment files
+.env
+*.local

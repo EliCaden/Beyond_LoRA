@@ -1,0 +1,17 @@
+cff-version: 1.2.0
+title: "Beyond LoRA: Is Sparsity-Induced Adaptation Better?"
+message: "If you use this software, please cite the accompanying paper."
+type: software
+authors:
+  - family-names: Cadenhead
+    given-names: Elijah
+  - family-names: McGee
+    given-names: Cristian
+  - family-names: Li
+    given-names: Xin
+  - family-names: Bergou
+    given-names: El Houcine
+  - family-names: Dutta
+    given-names: Aritra
+year: 2026
+repository-code: "https://github.com/EliCaden/Beyond_LoRA"

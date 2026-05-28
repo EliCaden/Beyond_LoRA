@@ -21,7 +21,7 @@
 #
 # Notes:
 #   - OpenBookQA labels: A/B/C/D -> 0..3
-#   - CLUTRR labels: fixed 21-class relation set (matches your prior scripts)
+#   - CLUTRR labels: fixed 21-class relation set
 
 from __future__ import annotations
 
@@ -83,7 +83,7 @@ def _count_based_reset_epochs(epochs: int, chainReset: int) -> List[int]:
     Count-based reset schedule: pick `chainReset` epochs evenly spaced in [2, epochs] (inclusive),
     then reset at START of those epochs.
 
-    ROUND-based discretization (no numpy), consistent with your other trainers.
+    ROUND-based discretization (no numpy), consistent with the other trainers.
     """
     if chainReset <= 0 or epochs < 2:
         return []

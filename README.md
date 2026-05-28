@@ -336,7 +336,3 @@ If this repository is useful for your work, please cite the accompanying paper:
   note   = {Preprint}
 }
 ```
-
-## License
-
-No license file is currently included in this repository. Please contact the authors before redistributing or reusing the code outside the scope allowed by the repository host and accompanying paper.

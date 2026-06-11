@@ -492,3 +492,19 @@ h1{
   font-size: clamp(16px, 1.45vw, 19px);
   line-height: 1.1;
 }
+
+/* Keep title on one line on normal desktop screens */
+h1{
+  font-size: clamp(24px, 2.65vw, 38px);
+  line-height: 1.02;
+  margin: 0 0 10px 0;
+  white-space: nowrap;
+}
+
+/* Allow wrapping again on narrow/mobile screens */
+@media (max-width: 900px){
+  h1{
+    white-space: normal;
+    font-size: clamp(25px, 5.2vw, 40px);
+  }
+}

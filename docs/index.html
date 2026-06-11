@@ -67,9 +67,8 @@
       </p>
 
       <p>
-        We introduce <strong>Cheap LoRA</strong> (<span class="mono">cLA</span>), its randomized variant,
-        <strong>circulant chained Cheap LoRA</strong> (<span class="mono">c<sup>3</sup>LA</span>), and randomized
-        chained variants. The paper combines information-theoretic generalization bounds with an empirical
+        We introduce <strong>Cheap LoRA</strong> (<span class="mono">cLA</span>),
+        <strong>Circulant Chain of Cheap LoRA</strong> (<span class="mono">c<sup>3</sup>LA</span>), and their randomized variants. We combine information-theoretic generalization bounds with an empirical
         study across language, vision, code, and reasoning tasks. Empirically, these sparse variants remain
         competitive across tasks while reducing training time by <strong>5–10%</strong> and peak GPU memory by
         <strong>5–15%</strong>.
@@ -119,15 +118,13 @@
 
       <p>
         Two PEFT methods can have similar trainable parameter counts but behave differently because
-        their updates occupy different subspaces. This paper asks whether structured sparsity inside
+        their updates occupy different subspaces. We investigate whether structured sparsity inside
         LoRA-style updates can preserve useful adaptation while reducing training cost.
       </p>
 
       <p>
         The central question is not only whether a method has fewer trainable parameters, but whether
-        the geometry of the update is enough for strong downstream adaptation. cLA tests this by
-        fixing one low-rank factor to select a structured column subspace and training only the other
-        factor.
+        the geometry of the update is enough for strong downstream adaptation.
       </p>
     </section>
 
@@ -139,7 +136,6 @@
           <h3>cLA</h3>
           <p>
             Fix <span class="mono">A = [I<sub>r</sub> | 0]</span> and train only <span class="mono">B</span>.
-            This restricts adaptation to a deterministic column subspace.
           </p>
         </article>
 
@@ -181,7 +177,7 @@
 
       <p>
         The main theoretical result upper bounds the generalization error of the full fine-tuned model
-        <span class="mono">W<sub>0</sub> + ΔW</span> by combining the pretrained backbone and the fine-tuned update.
+        <span class="mono">W<sub>0</sub> + ΔW</span> then adapted to when ΔW is a LoRA variant.
       </p>
 
       <figure class="img-figure">
@@ -201,7 +197,7 @@
 
       <p class="caption">
         The sparsity-induced variants inherit generalization-order behavior comparable to their closest
-        asymmetric or chained LoRA counterparts.
+        asymmetric or chained LoRA counterpart.
       </p>
     </section>
 
@@ -210,7 +206,7 @@
 
       <p>
         No single method dominates across all tasks. Sparse variants are often competitive with LoRA
-        and parameter-matched baselines, and in some settings they improve over standard LoRA.
+        and parameter-matched baselines, and in some settings they improve over standard LoRA. This is with a fixed epoch budget, and does not leverage the improved memory or runtime of the variants.
       </p>
 
       <div class="table-wrap">

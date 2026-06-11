@@ -1,0 +1,436 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Beyond LoRA: Is Sparsity-Induced Adaptation Better?</title>
+
+  <link rel="stylesheet" href="styles.css" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+  <main class="page">
+
+    <section class="bubble hero">
+      <div class="hero-inner">
+        <p class="eyebrow">Project Page</p>
+
+        <h1>Beyond LoRA: Is Sparsity-Induced Adaptation Better?</h1>
+
+        <p class="authors">
+          Elijah Cadenhead · Cristian McGee · Xin Li · El Houcine Bergou · Aritra Dutta
+        </p>
+
+        <p class="affiliations">
+          University of Central Florida · Mohammed VI Polytechnic University
+        </p>
+
+        <p class="subtitle">
+          Sparse, structured LoRA variants for cheaper and competitive parameter-efficient fine-tuning.
+        </p>
+
+        <div class="hero-links">
+          <a class="pill disabled" href="#" aria-disabled="true">Paper soon</a>
+          <a class="pill disabled" href="#" aria-disabled="true">arXiv soon</a>
+          <a class="pill" href="https://github.com/EliCaden/Beyond_LoRA">Code</a>
+          <a class="pill" href="#citation">BibTeX</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="bubble teaser">
+      <figure class="img-figure img-figure-clean">
+        <img src="paca_connection.png" alt="Connection between LoRA, PaCA, and sparsity-induced LoRA variants" />
+      </figure>
+
+      <p class="caption">
+        Our sparsity-induced LoRA variants connect two families of PEFT methods:
+        reparameterized fine-tuning, such as LoRA, and partial fine-tuning, such as PaCA.
+      </p>
+    </section>
+
+    <section class="bubble">
+      <h2>Abstract</h2>
+
+      <p>
+        Low-rank adaptation methods provide memory- and compute-efficient alternatives to full fine-tuning,
+        but it remains unclear how structural restrictions on low-rank updates affect adaptation and
+        generalization. We study sparsity-induced LoRA variants that restrict learning to structured
+        column subspaces while remaining competitive with parameter-matched baselines.
+      </p>
+
+      <p>
+        We introduce <strong>Cheap LoRA</strong> (<span class="mono">cLA</span>), its randomized variant,
+        <strong>circulant chained Cheap LoRA</strong> (<span class="mono">c<sup>3</sup>LA</span>), and randomized
+        chained variants. The paper combines information-theoretic generalization bounds with an empirical
+        study across language, vision, code, and reasoning tasks.
+      </p>
+    </section>
+
+    <section class="bubble">
+      <h2>Key Contributions</h2>
+
+      <div class="contrib-grid">
+        <article class="contrib-card">
+          <h3>Sparse LoRA Variants</h3>
+          <p>
+            We introduce cLA, random-cLA, c<sup>3</sup>LA, and random-c<sup>3</sup>LA as structured,
+            low-cost LoRA-style adaptation methods.
+          </p>
+        </article>
+
+        <article class="contrib-card">
+          <h3>Bridge to PaCA</h3>
+          <p>
+            We frame cLA as a structured asymmetric LoRA method that connects reparameterized
+            fine-tuning to partial column-space adaptation.
+          </p>
+        </article>
+
+        <article class="contrib-card">
+          <h3>Generalization Bounds</h3>
+          <p>
+            We derive information-theoretic generalization bounds comparing standard, asymmetric,
+            chained, and sparsity-induced PEFT methods.
+          </p>
+        </article>
+
+        <article class="contrib-card">
+          <h3>Broad Evaluation</h3>
+          <p>
+            We evaluate 11 fine-tuning methods across 10 pretrained models and 14 datasets,
+            spanning NLP, vision, code generation, and logical reasoning.
+          </p>
+        </article>
+      </div>
+    </section>
+
+    <section class="bubble">
+      <h2>Motivation: Parameter Count vs. Parameter Geometry</h2>
+
+      <p>
+        Two PEFT methods can have similar trainable parameter counts but behave differently because
+        their updates occupy different subspaces. This paper asks whether structured sparsity inside
+        LoRA-style updates can preserve useful adaptation while reducing training cost.
+      </p>
+
+      <p>
+        The central question is not only whether a method has fewer trainable parameters, but whether
+        the geometry of the update is enough for strong downstream adaptation. cLA tests this by
+        fixing one low-rank factor to select a structured column subspace and training only the other
+        factor.
+      </p>
+    </section>
+
+    <section class="bubble">
+      <h2>Method Overview</h2>
+
+      <div class="method-grid">
+        <article class="method-card">
+          <p class="method-label">Variant 1</p>
+          <h3>cLA</h3>
+          <p>
+            Fix <span class="mono">A = [I<sub>r</sub> | 0]</span> and train only <span class="mono">B</span>.
+            This restricts adaptation to a deterministic column subspace.
+          </p>
+        </article>
+
+        <article class="method-card">
+          <p class="method-label">Variant 2</p>
+          <h3>random-cLA</h3>
+          <p>
+            Randomize the fixed column selector while still training only the low-rank factor
+            <span class="mono">B</span>.
+          </p>
+        </article>
+
+        <article class="method-card">
+          <p class="method-label">Variant 3</p>
+          <h3>c<sup>3</sup>LA</h3>
+          <p>
+            Chain cLA modules and shift the identity block by <span class="mono">r</span> columns across chains,
+            expanding coverage over the pretrained layer.
+          </p>
+        </article>
+
+        <article class="method-card">
+          <p class="method-label">Variant 4</p>
+          <h3>random-c<sup>3</sup>LA</h3>
+          <p>
+            Combine randomized fixed selectors with the chained cLA construction.
+          </p>
+        </article>
+      </div>
+    </section>
+
+    <section class="bubble">
+      <h2>Theory</h2>
+
+      <p class="lead">
+        The main theoretical result upper bounds the generalization error of the full fine-tuned model
+        <span class="mono">W<sub>0</sub> + ΔW</span> by combining the pretrained backbone and the fine-tuned update.
+      </p>
+
+      <figure class="img-figure">
+        <img src="theorem.png" alt="Generalization error upper bound theorem" />
+      </figure>
+
+      <div class="takeaway">
+        <strong>Takeaway.</strong>
+        The bound gives a way to compare how the structure of each PEFT update affects generalization.
+        Applying it to LoRA-family methods yields a direct comparison between standard LoRA,
+        asymmetric LoRA, chained LoRA variants, cLA, PaCA, and c<sup>3</sup>LA.
+      </div>
+
+      <figure class="img-figure">
+        <img src="gen_compare.png" alt="Generalization upper bounds for different PEFT methods" />
+      </figure>
+
+      <p class="caption">
+        The sparsity-induced variants inherit generalization-order behavior comparable to their closest
+        asymmetric or chained LoRA counterparts.
+      </p>
+    </section>
+
+    <section class="bubble">
+      <h2>Experimental Scope</h2>
+
+      <div class="stats-grid">
+        <article class="stat-card">
+          <div class="stat-number">11</div>
+          <p>Fine-tuning methods</p>
+        </article>
+
+        <article class="stat-card">
+          <div class="stat-number">10</div>
+          <p>Pretrained models</p>
+        </article>
+
+        <article class="stat-card">
+          <div class="stat-number">14</div>
+          <p>Datasets</p>
+        </article>
+
+        <article class="stat-card">
+          <div class="stat-number">4</div>
+          <p>Task families</p>
+        </article>
+      </div>
+
+      <p class="scope-text">
+        The evaluation covers natural language processing, image classification, code generation,
+        and logical reasoning. Models include DeBERTa, RoBERTa, GPT-2, DeepseekCoder, TinyLlama,
+        Llama 3, and Vision Transformers.
+      </p>
+    </section>
+
+    <section class="bubble">
+      <h2>Representative Quantitative Results</h2>
+
+      <p>
+        No single method dominates across all tasks. Sparse variants are often competitive with LoRA
+        and parameter-matched baselines, and in some settings they improve over standard LoRA.
+      </p>
+
+      <div class="table-wrap">
+        <table class="results-table">
+          <thead>
+            <tr>
+              <th>Model</th>
+              <th>Dataset</th>
+              <th>LoRA</th>
+              <th>cLA</th>
+              <th>c<sup>3</sup>LA</th>
+              <th>Observation</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>ViT-Base</td>
+              <td>OfficeHome</td>
+              <td>88.96</td>
+              <td>89.21</td>
+              <td>89.18</td>
+              <td>cLA/c<sup>3</sup>LA match or exceed LoRA</td>
+            </tr>
+            <tr>
+              <td>ViT-Base</td>
+              <td>CIFAR-10</td>
+              <td>98.71</td>
+              <td>98.63</td>
+              <td>98.54</td>
+              <td>Small drop under sparse restriction</td>
+            </tr>
+            <tr>
+              <td>Llama3-8B</td>
+              <td>CLUTRR</td>
+              <td>48.70</td>
+              <td>55.53</td>
+              <td>52.04</td>
+              <td>cLA improves over LoRA</td>
+            </tr>
+            <tr>
+              <td>DeBERTa v2 XXL</td>
+              <td>TREC-50</td>
+              <td>91.47</td>
+              <td>91.73</td>
+              <td>90.87</td>
+              <td>cLA remains competitive</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="bubble">
+      <h2>Efficiency</h2>
+
+      <p>
+        Even with a naïve non-optimized sparse implementation, the sparse variants reduce training
+        time and peak GPU memory while preserving competitive downstream performance.
+      </p>
+
+      <div class="stats-grid efficiency-grid">
+        <article class="stat-card">
+          <div class="stat-number">5–10%</div>
+          <p>Training-time reduction</p>
+        </article>
+
+        <article class="stat-card">
+          <div class="stat-number">5–15%</div>
+          <p>Peak GPU memory reduction</p>
+        </article>
+
+        <article class="stat-card">
+          <div class="stat-number">Naïve</div>
+          <p>Sparse implementation</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="bubble">
+      <h2>Diagnostics: When Sharpness and Generalization Disagree</h2>
+
+      <p>
+        Loss landscapes and intruder dimensions are useful diagnostics, but they do not always align
+        with empirical generalization error. This motivates reporting both model quality and measured
+        generalization gaps when comparing PEFT methods.
+      </p>
+
+      <figure class="img-figure">
+        <img src="loss_landscape.png" alt="Loss landscape comparison across fine-tuning methods" />
+      </figure>
+
+      <p class="caption">
+        In several settings, sharper or smoother loss landscapes do not perfectly predict empirical
+        generalization behavior.
+      </p>
+    </section>
+
+    <section class="bubble">
+      <h2>Algorithms</h2>
+
+      <p>
+        The following pseudocode sketches the sparse adaptation mechanisms used by the proposed variants.
+      </p>
+
+      <div class="details-grid">
+        <details>
+          <summary>cLA</summary>
+          <pre><code>Given pretrained layer W0 ∈ R^{n×m}
+Choose rank r and scale α
+
+Set A = [ I_r | 0_{r×(m-r)} ]
+Initialize B = 0_{n×r}
+
+For each training step:
+  Compute loss L using W = W0 + (α/r) · B · A
+  Update B ← B − η · ∇_B L
+
+Return adapted layer W</code></pre>
+        </details>
+
+        <details>
+          <summary>c<sup>3</sup>LA</summary>
+          <pre><code>Given pretrained layer W0 ∈ R^{n×m}
+Choose rank r, chain length k, scale α
+
+For j = 1..k:
+  Define A_j as a shifted selector
+    A_1 = [ I_r | 0 | 0 | ... ]
+    A_2 = [ 0 | I_r | 0 | ... ]
+    ...
+  Initialize B_j = 0_{n×r}
+
+For j = 1..k:
+  For each training step:
+    Compute loss L using
+      W = W0 + Σ_{t=1..j} (α/r) · B_t · A_t
+    Update B_j ← B_j − η · ∇_{B_j} L
+
+Return adapted layer W</code></pre>
+        </details>
+
+        <details>
+          <summary>random-cLA</summary>
+          <pre><code>Given pretrained layer W0 ∈ R^{n×m}
+Choose rank r and scale α
+
+Sample a fixed randomized selector A
+Initialize B = 0_{n×r}
+
+For each training step:
+  Compute loss L using W = W0 + (α/r) · B · A
+  Update B ← B − η · ∇_B L
+
+Return adapted layer W</code></pre>
+        </details>
+
+        <details>
+          <summary>random-c<sup>3</sup>LA</summary>
+          <pre><code>Given pretrained layer W0 ∈ R^{n×m}
+Choose rank r, chain length k, scale α
+
+For j = 1..k:
+  Sample a fixed randomized selector A_j
+  Initialize B_j = 0_{n×r}
+
+For j = 1..k:
+  For each training step:
+    Compute loss L using
+      W = W0 + Σ_{t=1..j} (α/r) · B_t · A_t
+    Update B_j ← B_j − η · ∇_{B_j} L
+
+Return adapted layer W</code></pre>
+        </details>
+      </div>
+    </section>
+
+    <section class="bubble" id="citation">
+      <h2>Citation</h2>
+
+      <pre><code>@article{cadenhead2026beyondlora,
+  title={Beyond LoRA: Is Sparsity-Induced Adaptation Better?},
+  author={Cadenhead, Elijah and McGee, Cristian and Li, Xin and Bergou, El Houcine and Dutta, Aritra},
+  year={2026}
+}</code></pre>
+    </section>
+
+    <section class="bubble bubble-footer">
+      <div class="footer-row">
+        <span>© <span id="year"></span> Beyond LoRA</span>
+        <span class="muted">Hosted on GitHub Pages</span>
+      </div>
+    </section>
+
+  </main>
+
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>

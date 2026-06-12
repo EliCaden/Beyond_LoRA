@@ -182,7 +182,7 @@ Return adapted layer W</code></pre>
 
       <h3 class="subsection-title">Bridge to PaCA</h3>
       <p>
-        Partial Connection Adaptation (PaCA) was motivated from a systems perspective: it reduces activation memory by only training a subset of the columns of each original layers' weights. Our sparse LoRa variants provide a theoretical bridge between PaCA and LoRA; when PaCA fine-tunes the first <span class="mono">r</span> columns of the pretrained layer, it updates the same parameters as cLA, thus PaCA can be reframed theoretically as a LoRA style update, allowing us to apply theoretical results from LoRA to PaCA. This does not imply that PaCA is strictly better than the cLA variants, since there are many benefits of the LoRA structure (being able to switch between multiple tasks easily, for example) that PaCA does not retain.
+        Partial Connection Adaptation (PaCA) was motivated from a systems perspective: it reduces activation memory by only training a subset of the columns of each original layers' weights. Our sparse LoRA variants provide a theoretical bridge between PaCA and LoRA; when PaCA fine-tunes the first <span class="mono">r</span> columns of the pretrained layer, it updates the same parameters as cLA, thus PaCA can be reframed theoretically as a LoRA style update, allowing us to apply theoretical results from LoRA to PaCA. This does not imply that PaCA is strictly better than the cLA variants, since there are many benefits of the LoRA structure (being able to switch between multiple tasks easily, for example) that PaCA does not retain.
       </p>
       <figure class="img-figure img-figure-clean">
         <img src="lora_paca_connect.png" alt="Connection between LoRA, PaCA, and sparsity-induced LoRA variants" />

@@ -52,7 +52,7 @@
         <article class="contrib-card">
           <h3>Sparse LoRA Variants</h3>
           <p>
-            We introduce cLA, random-cLA, c<sup>3</sup>LA, and random-c<sup>3</sup>LA as simple, sparse extensions of strong LoRA variants. These methods train restricted column-subspace updates by fixing part of the low-rank structure, thereby separating trainable parameter count from update geometry.
+            We introduce cLA, random-cLA, c<sup>3</sup>LA, and random-c<sup>3</sup>LA as simple, sparse extensions of state of the art LoRA variants. These methods train restricted column-subspace updates by fixing part of the low-rank structure, thereby separating trainable parameter count from update geometry.
           </p>
         </article>
         <article class="contrib-card">
@@ -76,7 +76,7 @@
         PEFT methods are often compared by trainable parameter count, but parameter count alone does not explain how an update changes the pretrained model. Two adapters can have nearly identical parameter budgets while occupying very different subspaces of the original weight matrix, producing different performance, robustness, and generalization behavior.
       </p>
       <p>
-        Our central question is therefore geometric: which structured restrictions on low-rank updates preserve useful adaptation, and how far can we restrict the column space before the model stops adapting well? By inducing sparsity into LoRA-style updates, cLA and its chained/randomized variants provide a controlled way to study whether the location and structure of the update matters as much as, or more than, the number of trainable parameters.
+        Our central question is therefore geometric: which structured restrictions on low-rank updates preserve useful adaptation, and how far can we restrict the column space before the model stops adapting well? By inducing structured sparsity into LoRA-style updates, cLA and its chained/randomized variants provide a controlled way to study whether the location and structure of the update matters as much as, or more than, the number of trainable parameters while leveraging the sparse structure to save runtime and memory.
       </p>
     </section>
 
@@ -158,7 +158,7 @@ Return adapted layer W</code></pre>
 Choose rank r, chain length k, scale α
 
 For j = 1..k:
-  Sample a fixed randomized selector A_j
+  Sample a fixed randomized selector without replacement A_j from the shifted selectors of c^{3}LA
   Initialize B_j = 0_{n×r}
 
 For j = 1..k:
@@ -182,7 +182,7 @@ Return adapted layer W</code></pre>
 
       <h3 class="subsection-title">Bridge to PaCA</h3>
       <p>
-        PaCA was motivated from a systems perspective: it reduces activation memory and improves sequential processing of the adapter and pretrained LoRA layers. Surprisingly, the same restricted-column viewpoint also gives a theoretical bridge between PaCA and sparse LoRA. When PaCA fine-tunes the first <span class="mono">r</span> columns of the pretrained layer, its update has the same degrees of freedom as cLA, so generalization guarantees driven by the update transfer directly.
+        Partial Connection Adaptation (PaCA) was motivated from a systems perspective: it reduces activation memory by only training a subset of the columns of each original layers' weights. Our sparse LoRa variants provide a theoretical bridge between PaCA and LoRA; when PaCA fine-tunes the first <span class="mono">r</span> columns of the pretrained layer, it updates the same parameters as cLA, thus PaCA can be reframed theoretically as a LoRA style update, allowing us to apply theoretical results from LoRA to PaCA. This does not imply that PaCA is strictly better than the cLA variants, since there are many benefits of the LoRA structure (being able to switch between multiple tasks easily, for example) that PaCA does not retain.
       </p>
       <figure class="img-figure img-figure-clean">
         <img src="lora_paca_connect.png" alt="Connection between LoRA, PaCA, and sparsity-induced LoRA variants" />
@@ -193,7 +193,7 @@ Return adapted layer W</code></pre>
     <section class="bubble">
       <h2>Theory</h2>
       <p>
-        Theorem 1 is a general result for an arbitrary <span class="mono">L</span>-layer neural network, not a statement specific to LoRA. It upper bounds the generalization error of a fine-tuned model <span class="mono">W<sub>0</sub> + ΔW</span> using the generalization behavior of either the pretrained backbone or the update. This makes it a reusable template: once a PEFT method specifies the structure of <span class="mono">ΔW</span>, the theorem can be specialized to compare LoRA variants.
+        Theorem 1 is a general result for an arbitrary <span class="mono">L</span>-layer neural network, not a statement specific to LoRA. It upper bounds the generalization error of a fine-tuned model <span class="mono">W<sub>0</sub> + ΔW</span> using the generalization behavior of either the pretrained backbone or the update. This makes it a reusable template: once a PEFT method specifies the structure of <span class="mono">ΔW</span>, the theorem can comment on its generalizability.
       </p>
       <p>
         The standalone correction terms <span class="mono">Φ<sub>ΔW</sub></span> and <span class="mono">Φ<sub>W0</sub></span> collect the Lipschitz constants of the loss and activations, layerwise spectral norms of the base and update weights, and zero-activation offset terms from recursively collapsing the difference between the fine-tuned and pretrained networks.
@@ -212,7 +212,7 @@ Return adapted layer W</code></pre>
         <div><strong>n<sub>i</sub></strong>: output dimension of layer <span class="mono">i</span></div>
         <div><strong>r</strong>: adapter rank</div>
         <div><strong>k</strong>: chain length</div>
-        <div><strong>q</strong>: bitwidth used to encode the learning algorithm/update support</div>
+        <div><strong>q</strong>: bitwidth of the stored weights</div>
         <div><strong>σ</strong>: sub-Gaussian parameter of the loss in the mutual-information bound</div>
         <div><strong>|N|</strong>: fine-tuning dataset size</div>
       </div>
@@ -222,7 +222,7 @@ Return adapted layer W</code></pre>
     <section class="bubble">
       <h2>Benchmarking and Evaluation</h2>
       <p>
-        The full empirical comparison reports performance and generalization over 11 fine-tuning methods. For CoLA, higher Matthews correlation is better; for GPT2-small, lower perplexity is better; and for the remaining datasets, higher accuracy is better.
+        The full empirical comparison reports performance and generalization over 11 fine-tuning methods. For CoLA we report the Matthews correlation coefficient (higher is better); for GPT2-small, perplexity (lower is better); and for the remaining datasets, accuracy.
       </p>
       <figure class="img-figure wide-figure">
         <img src="Table2_Performance.png" alt="Table 2: performance of fine-tuned models" />
@@ -241,7 +241,7 @@ Return adapted layer W</code></pre>
         Loss landscapes and intruder dimensions are useful diagnostics, but they do not consistently align with empirical generalization error or test performance. Chain variants often produce sharper landscapes and more intruder dimensions than their non-chain counterparts, but this does not necessarily imply worse empirical generalization.
       </p>
       <p>
-        The key takeaway is that these diagnostics can provide useful post hoc explanations, but they can also produce false positives. In this paper, jointly reporting test performance and empirical <span class="mono">G(W)</span> gives a more reliable criterion for selecting PEFT methods across tasks, models, and datasets.
+        The key takeaway is that these diagnostics can provide useful post hoc explanations, but they can also produce false positives. In this paper, we show that our information-theoretic generalization bounds predict our empirical generalization results (where lower bounds result in lower generalization) more consistently than loss landscapes and intruder dimensions.
       </p>
       <figure class="img-figure">
         <img src="Updated_Teaser_Good.png" alt="Loss landscape comparison across fine-tuning methods" />
@@ -253,18 +253,18 @@ Return adapted layer W</code></pre>
       <ul class="takeaway-list">
         <li>PEFT performance is task-dependent: no single fine-tuning method dominates across all models and datasets.</li>
         <li>Sparse LoRA variants often remain competitive with their parent methods while enabling practical runtime and memory advantages.</li>
-        <li>Generalization-aware comparisons are more informative than relying only on parameter count, loss landscapes, or intruder dimensions.</li>
+        <li>Our information-theoretic generalizion bounds are more informative than relying on loss landscapes or intruder dimensions.</li>
       </ul>
     </section>
 
     <section class="bubble" id="citation">
       <h2>Citation</h2>
-      <pre><code>@article{cadenhead2026beyondlora,
+      <pre><code>@article{beyondlora,
   title={Beyond LoRA: Is Sparsity-Induced Adaptation Better?},
   author={Cadenhead, Elijah and McGee, Cristian and Li, Xin and Bergou, El Houcine and Dutta, Aritra},
   year={2026}
 }</code></pre>
-      <p class="caption">Replace this with the arXiv citation once the preprint is live.</p>
+      <p class="caption">Will replace this with the arXiv citation once the preprint is live.</p>
     </section>
 
     <section class="bubble bubble-footer">

@@ -247,7 +247,7 @@ Return adapted layer W</code></pre>
         <img src="Updated_Teaser_Good.png" alt="Loss landscape comparison across fine-tuning methods" />
       </figure>
       <p class="caption">Loss landscapes of ViT-Base fined tuned on OfficeHome (top row) with PCA directions, and
-RoBERTa-Base fine-tuned on CoLA (bottom row) with random directions. Note in (b) and (c) where CoLA produces a spikier landscape than LoRA while reporting better generalization error empirically.</p>
+RoBERTa-Base fine-tuned on CoLA (bottom row) with random directions. Note in (b) and (c) where RAC-LoRA produces a spikier landscape than LoRA while reporting better generalization error empirically. This better generalization is predicted by our information-theoretic bounds (for the chain length we ran in this experiment), as only training the <span class="mono">B</span>-matrix reduces the bound.</p>
     </section>
 
     <section class="bubble">

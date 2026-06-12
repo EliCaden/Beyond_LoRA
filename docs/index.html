@@ -1,0 +1,279 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Beyond LoRA: Is Sparsity-Induced Adaptation Better?</title>
+  <link rel="stylesheet" href="styles.css?v=9" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <main class="page">
+
+    <section class="hero">
+      <h1>Beyond LoRA: Is Sparsity-Induced Adaptation Better?</h1>
+
+      <div class="author-line">
+        <span><a href="https://github.com/EliCaden">Elijah Cadenhead</a><sup>1</sup></span>
+        <span><a href="https://github.com/nizswan">Cristian McGee</a><sup>1</sup></span>
+        <span><a href="https://scholar.google.com/citations?user=6j5YOXMAAAAJ&hl=en&oi=ao">Xin Li</a><sup>1</sup></span>
+        <span><a href="https://scholar.google.com/citations?user=qzxprWoAAAAJ&hl=en&oi=ao">El Houcine Bergou</a><sup>2</sup></span>
+        <span><a href="https://scholar.google.com/citations?user=vquoiHsAAAAJ&hl=en&oi=ao">Aritra Dutta</a><sup>1</sup></span>
+      </div>
+
+      <div class="affiliation-block">
+        <p><sup>1</sup><a href="https://www.ucf.edu/">University of Central Florida</a></p>
+        <p><sup>2</sup><a href="https://um6p.ma/en">Mohammed VI Polytechnic University</a></p>
+      </div>
+
+      <p class="tagline">Sparse, structured LoRA variants for cheaper and competitive parameter-efficient fine-tuning.</p>
+
+      <div class="hero-links">
+        <a class="paper-link" href="https://github.com/EliCaden/Beyond_LoRA">[Code]</a>
+        <a class="paper-link" href="#citation">[BibTeX]</a>
+      </div>
+    </section>
+
+    <section class="bubble">
+      <h2>Abstract</h2>
+      <p>
+        Low-rank adaptation (LoRA) and its variants provide a memory- and compute-efficient alternative to full fine-tuning of pre-trained models. However, questions remain about the comparative generalizability of these approaches and how the structural restrictions on low-rank updates preserve effective adaptation performance. We present a historical framing, covering the past (full fine-tuning and original LoRA), the present (different variants of LoRA), and propose simpler, cheaper, parameter-efficient extensions by inducing sparsity within existing LoRA variants: Cheap LoRA (cLA), training a single low-rank factor with the other fixed (deterministically or, in its randomized variant, stochastically), and the chained circulant variant, c<sup>3</sup>LA.
+      </p>
+      <p>
+        We frame cLA as a structured instance of asymmetric LoRA, serving as a controlled column-subspace restriction of full fine-tuning. We derive information-theoretic generalization error bounds for these variants, marking one of the first endeavors in this area. Empirically, we evaluate <strong>11 fine-tuning methods</strong> across <strong>10 pre-trained models and 14 datasets</strong>, analyzing the fine-tuned models' performance and generalization using tools such as loss landscapes and spectral analysis. Despite the sensitivity of fine-tuned models to the pre-trained model, datasets, and other factors, our study suggests that restricting LoRA-based PEFT methods' adaptation to a sparse, structured column space remains competitive across tasks with their parameter-matched baselines while reducing <strong>up to 10% training time</strong> and <strong>peak GPU memory up to 15%</strong>, even with a naïve, non-optimized, sparse implementation. Our theoretical and empirical generalization measures provide a more consistent and principled approach to their cost-effective adaptation than commonly used analytical tools.
+      </p>
+    </section>
+
+    <section class="bubble">
+      <h2>Key Contributions</h2>
+      <div class="contrib-grid three-card-grid">
+        <article class="contrib-card">
+          <h3>Sparse LoRA Variants</h3>
+          <p>
+            We introduce cLA, random-cLA, c<sup>3</sup>LA, and random-c<sup>3</sup>LA as simple, sparse extensions of strong LoRA variants. These methods train restricted column-subspace updates by fixing part of the low-rank structure, thereby separating trainable parameter count from update geometry.
+          </p>
+        </article>
+        <article class="contrib-card">
+          <h3>Generalization Bounds</h3>
+          <p>
+            We derive information-theoretic generalization bounds for LoRA-family updates. The resulting framework connects rank, chain length, layer dimensions, bitwidth, dataset size, and update support to the expected generalization behavior of PEFT methods.
+          </p>
+        </article>
+        <article class="contrib-card">
+          <h3>Benchmarking and Evaluation</h3>
+          <p>
+            We benchmark 11 fine-tuning methods across 10 pretrained models and 14 datasets spanning NLP, vision, code generation, and logical reasoning, while measuring accuracy, empirical generalization, loss landscapes, spectral behavior, runtime, throughput, and memory.
+          </p>
+        </article>
+      </div>
+    </section>
+
+    <section class="bubble">
+      <h2>Motivation: Parameter Count vs. Parameter Geometry</h2>
+      <p>
+        PEFT methods are often compared by trainable parameter count, but parameter count alone does not explain how an update changes the pretrained model. Two adapters can have nearly identical parameter budgets while occupying very different subspaces of the original weight matrix, producing different performance, robustness, and generalization behavior.
+      </p>
+      <p>
+        Our central question is therefore geometric: which structured restrictions on low-rank updates preserve useful adaptation, and how far can we restrict the column space before the model stops adapting well? By inducing sparsity into LoRA-style updates, cLA and its chained/randomized variants provide a controlled way to study whether the location and structure of the update matters as much as, or more than, the number of trainable parameters.
+      </p>
+    </section>
+
+    <section class="bubble">
+      <h2>Method Overview</h2>
+      <div class="method-grid">
+        <article class="method-card">
+          <h3>cLA</h3>
+          <p>Fix <span class="mono">A = [I<sub>r</sub> | 0]</span> and train only <span class="mono">B</span>, restricting adaptation to a deterministic <span class="mono">r</span>-column subspace.</p>
+        </article>
+        <article class="method-card">
+          <h3>random-cLA</h3>
+          <p>Randomize the fixed column selector while still training only <span class="mono">B</span>, spreading the sparse update over a randomized column restriction.</p>
+        </article>
+        <article class="method-card">
+          <h3>c<sup>3</sup>LA</h3>
+          <p>Chain cLA modules and shift the identity block by <span class="mono">r</span> columns across chains, expanding the covered columns of the pretrained layer.</p>
+        </article>
+        <article class="method-card">
+          <h3>random-c<sup>3</sup>LA</h3>
+          <p>Combine randomized selectors with the chained cLA construction, yielding a randomized sparse chained update.</p>
+        </article>
+      </div>
+
+      <h3 class="subsection-title">Algorithms</h3>
+      <p>The pseudocode below sketches the sparse adaptation mechanisms used by the proposed variants.</p>
+      <div class="details-grid">
+        <details>
+          <summary>cLA</summary>
+          <pre><code>Given pretrained layer W0 ∈ R^{n×m}
+Choose rank r and scale α
+
+Set A = [ I_r | 0_{r×(m-r)} ]
+Initialize B = 0_{n×r}
+
+For each training step:
+  Compute loss L using W = W0 + (α/r) · B · A
+  Update B ← B − η · ∇_B L
+
+Return adapted layer W</code></pre>
+        </details>
+        <details>
+          <summary>c<sup>3</sup>LA</summary>
+          <pre><code>Given pretrained layer W0 ∈ R^{n×m}
+Choose rank r, chain length k, scale α
+
+For j = 1..k:
+  Define A_j as a shifted selector
+    A_1 = [ I_r | 0 | 0 | ... ]
+    A_2 = [ 0 | I_r | 0 | ... ]
+    ...
+  Initialize B_j = 0_{n×r}
+
+For j = 1..k:
+  For each training step:
+    Compute loss L using
+      W = W0 + Σ_{t=1..j} (α/r) · B_t · A_t
+    Update B_j ← B_j − η · ∇_{B_j} L
+
+Return adapted layer W</code></pre>
+        </details>
+        <details>
+          <summary>random-cLA</summary>
+          <pre><code>Given pretrained layer W0 ∈ R^{n×m}
+Choose rank r and scale α
+
+Sample a fixed randomized selector A
+Initialize B = 0_{n×r}
+
+For each training step:
+  Compute loss L using W = W0 + (α/r) · B · A
+  Update B ← B − η · ∇_B L
+
+Return adapted layer W</code></pre>
+        </details>
+        <details>
+          <summary>random-c<sup>3</sup>LA</summary>
+          <pre><code>Given pretrained layer W0 ∈ R^{n×m}
+Choose rank r, chain length k, scale α
+
+For j = 1..k:
+  Sample a fixed randomized selector A_j
+  Initialize B_j = 0_{n×r}
+
+For j = 1..k:
+  For each training step:
+    Compute loss L using
+      W = W0 + Σ_{t=1..j} (α/r) · B_t · A_t
+    Update B_j ← B_j − η · ∇_{B_j} L
+
+Return adapted layer W</code></pre>
+        </details>
+      </div>
+
+      <h3 class="subsection-title">Naïve sparse implementation</h3>
+      <p>
+        The sparse construction can be implemented without multiplying by the full fixed selector. For cLA and random-cLA, the selector <span class="mono">A</span> simply chooses <span class="mono">r</span> coordinates of the input. Instead of computing <span class="mono">A(x)</span> as a dense matrix multiplication, the implementation stores the selected column indices and directly gathers <span class="mono">[x<sub>c1</sub>, …, x<sub>cr</sub>]</span>. This avoids unnecessary selector FLOPs and helps explain the observed runtime and memory reductions.
+      </p>
+      <figure class="img-figure img-figure-clean">
+        <img src="Sparse_Figure_Final.png" alt="Naive sparse implementation diagram" />
+      </figure>
+      <p class="caption">Sparse LoRA variants can exploit the fact that the fixed selector only gathers a small set of input columns.</p>
+
+      <h3 class="subsection-title">Bridge to PaCA</h3>
+      <p>
+        PaCA was motivated from a systems perspective: it reduces activation memory and improves sequential processing of the adapter and pretrained LoRA layers. Surprisingly, the same restricted-column viewpoint also gives a theoretical bridge between PaCA and sparse LoRA. When PaCA fine-tunes the first <span class="mono">r</span> columns of the pretrained layer, its update has the same degrees of freedom as cLA, so generalization guarantees driven by the update transfer directly.
+      </p>
+      <figure class="img-figure img-figure-clean">
+        <img src="lora_paca_connect.png" alt="Connection between LoRA, PaCA, and sparsity-induced LoRA variants" />
+      </figure>
+      <p class="caption">Sparsity-induced LoRA variants connect reparameterized fine-tuning and partial fine-tuning.</p>
+    </section>
+
+    <section class="bubble">
+      <h2>Theory</h2>
+      <p>
+        Theorem 1 is a general result for an arbitrary <span class="mono">L</span>-layer neural network, not a statement specific to LoRA. It upper bounds the generalization error of a fine-tuned model <span class="mono">W<sub>0</sub> + ΔW</span> using the generalization behavior of either the pretrained backbone or the update. This makes it a reusable template: once a PEFT method specifies the structure of <span class="mono">ΔW</span>, the theorem can be specialized to compare LoRA variants.
+      </p>
+      <p>
+        The standalone correction terms <span class="mono">Φ<sub>ΔW</sub></span> and <span class="mono">Φ<sub>W0</sub></span> collect the Lipschitz constants of the loss and activations, layerwise spectral norms of the base and update weights, and zero-activation offset terms from recursively collapsing the difference between the fine-tuned and pretrained networks.
+      </p>
+      <figure class="img-figure">
+        <img src="Theorem_1_itself.png" alt="Generalization error upper bound theorem" />
+      </figure>
+      <div class="takeaway">
+        <strong>Intuition.</strong> The theorem converts the problem of comparing PEFT updates into a spectral and information-theoretic control problem. Each layer contributes either base-model spectral magnitude or update spectral magnitude, and the LoRA-family table is obtained by plugging in the number and structure of trainable update parameters.
+      </div>
+      <figure class="img-figure">
+        <img src="Gen_Bound_Theory_Table.png" alt="Generalization upper bounds for different PEFT methods" />
+      </figure>
+      <div class="notation-grid">
+        <div><strong>m<sub>i</sub></strong>: input dimension of layer <span class="mono">i</span></div>
+        <div><strong>n<sub>i</sub></strong>: output dimension of layer <span class="mono">i</span></div>
+        <div><strong>r</strong>: adapter rank</div>
+        <div><strong>k</strong>: chain length</div>
+        <div><strong>q</strong>: bitwidth used to encode the learning algorithm/update support</div>
+        <div><strong>σ</strong>: sub-Gaussian parameter of the loss in the mutual-information bound</div>
+        <div><strong>|N|</strong>: fine-tuning dataset size</div>
+      </div>
+      <p class="caption">cLA and PaCA inherit the same generalization-order dependence, while c<sup>3</sup>LA inherits the chain-length dependence of chained LoRA variants.</p>
+    </section>
+
+    <section class="bubble">
+      <h2>Benchmarking and Evaluation</h2>
+      <p>
+        The full empirical comparison reports performance and generalization over 11 fine-tuning methods. For CoLA, higher Matthews correlation is better; for GPT2-small, lower perplexity is better; and for the remaining datasets, higher accuracy is better.
+      </p>
+      <figure class="img-figure wide-figure">
+        <img src="Table2_Performance.png" alt="Table 2: performance of fine-tuned models" />
+      </figure>
+      <p class="caption">Table 2: Performance of fine-tuned models across the past, present, and future PEFT methods.</p>
+
+      <figure class="img-figure wide-figure">
+        <img src="Table3_Generalization.png" alt="Table 3: empirical generalization error" />
+      </figure>
+      <p class="caption">Table 3: Empirical generalization error across the same fine-tuning families.</p>
+    </section>
+
+    <section class="bubble">
+      <h2>Diagnostics: When Sharpness and Generalization Disagree</h2>
+      <p>
+        Loss landscapes and intruder dimensions are useful diagnostics, but they do not consistently align with empirical generalization error or test performance. Chain variants often produce sharper landscapes and more intruder dimensions than their non-chain counterparts, but this does not necessarily imply worse empirical generalization.
+      </p>
+      <p>
+        The key takeaway is that these diagnostics can provide useful post hoc explanations, but they can also produce false positives. In this paper, jointly reporting test performance and empirical <span class="mono">G(W)</span> gives a more reliable criterion for selecting PEFT methods across tasks, models, and datasets.
+      </p>
+      <figure class="img-figure">
+        <img src="Updated_Teaser_Good.png" alt="Loss landscape comparison across fine-tuning methods" />
+      </figure>
+    </section>
+
+    <section class="bubble">
+      <h2>Closing Takeaways</h2>
+      <ul class="takeaway-list">
+        <li>PEFT performance is task-dependent: no single fine-tuning method dominates across all models and datasets.</li>
+        <li>Sparse LoRA variants often remain competitive with their parent methods while enabling practical runtime and memory advantages.</li>
+        <li>Generalization-aware comparisons are more informative than relying only on parameter count, loss landscapes, or intruder dimensions.</li>
+      </ul>
+    </section>
+
+    <section class="bubble" id="citation">
+      <h2>Citation</h2>
+      <pre><code>@article{cadenhead2026beyondlora,
+  title={Beyond LoRA: Is Sparsity-Induced Adaptation Better?},
+  author={Cadenhead, Elijah and McGee, Cristian and Li, Xin and Bergou, El Houcine and Dutta, Aritra},
+  year={2026}
+}</code></pre>
+      <p class="caption">Replace this with the arXiv citation once the preprint is live.</p>
+    </section>
+
+    <section class="bubble bubble-footer">
+      <div class="footer-row">
+        <span>© <span id="year"></span> Beyond LoRA</span>
+        <span class="muted">Hosted on GitHub Pages</span>
+      </div>
+    </section>
+  </main>
+  <script>document.getElementById("year").textContent = new Date().getFullYear();</script>
+</body>
+</html>

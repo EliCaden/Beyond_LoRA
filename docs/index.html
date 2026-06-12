@@ -58,7 +58,7 @@
         <article class="contrib-card">
           <h3>Generalization Bounds</h3>
           <p>
-            We derive information-theoretic generalization bounds for LoRA-family updates. The resulting framework connects rank, chain length, layer dimensions, bitwidth, dataset size, and update support to the expected generalization behavior of PEFT methods.
+            We derive information-theoretic generalization bounds for LoRA-family updates. The resulting framework connects rank, chain length, layer dimensions, bitwidth, dataset size, and update support to the generalization behavior of fine-tuned models.
           </p>
         </article>
         <article class="contrib-card">
@@ -227,12 +227,12 @@ Return adapted layer W</code></pre>
       <figure class="img-figure wide-figure">
         <img src="Table2_Performance.png" alt="Table 2: performance of fine-tuned models" />
       </figure>
-      <p class="caption">Table 2: Performance of fine-tuned models across the past, present, and future PEFT methods.</p>
+      <p class="caption">Performance of fine-tuned models across the past, present, and future PEFT methods.</p>
 
       <figure class="img-figure wide-figure">
         <img src="Table3_Generalization.png" alt="Table 3: empirical generalization error" />
       </figure>
-      <p class="caption">Table 3: Empirical generalization error across the same fine-tuning families.</p>
+      <p class="caption">Empirical generalization error across the same fine-tuning families.</p>
     </section>
 
     <section class="bubble">
@@ -246,6 +246,7 @@ Return adapted layer W</code></pre>
       <figure class="img-figure">
         <img src="Updated_Teaser_Good.png" alt="Loss landscape comparison across fine-tuning methods" />
       </figure>
+      <p class="caption">In this example, full fine-tuning has the sharpest loss landscape yet reports the best generalization, conflicting with common rhetoric.</p>
     </section>
 
     <section class="bubble">

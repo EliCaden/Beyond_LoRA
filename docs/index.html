@@ -205,9 +205,15 @@ Return adapted layer W</code></pre>
         <strong>Intuition.</strong> The theorem converts the problem of comparing PEFT updates into a spectral and information-theoretic control problem. Each layer contributes either base-model spectral magnitude or update spectral magnitude, and the LoRA-family table is obtained by plugging in the number and structure of trainable update parameters.
       </div>
       <div class="takeaway">
-        <strong>Extension to transformer architectures.</strong> applies to any architecture that can be written as a composition of linear maps and
+        <strong>Extension to transformer architectures.</strong> Theorem 1 applies to any architecture that can be written as a composition of linear maps and
 Lipschitz maps, under bounded input. We therefore view transformer blocks as fitting the theorem. For the specifics on adapting Theorem 1 to the attention mechanism, see our paper's appendix section D.1.5.
       </div>
+      <p class="caption">
+        With the additional assumption that the loss function <span class="math">ℓ(·)</span> is
+        <span class="math">σ</span>-sub-Gaussian, we obtain closed-form upper bounds for the LoRA variants
+        studied in this paper and for PaCA. Table 1 summarizes these bounds. For the derivation of each
+        variant-specific bound, see Appendix D.1.6 of the paper.
+      </p>
       <figure class="img-figure">
         <img src="Gen_Bound_Theory_Table.png" alt="Generalization upper bounds for different PEFT methods" />
       </figure>

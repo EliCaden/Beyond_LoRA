@@ -245,3 +245,25 @@ code{ font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liber
     min-width: 860px;
   }
 }
+
+.rank-green{
+  color: #008000;
+  font-weight: 700;
+}
+
+.rank-red{
+  color: #d62728;
+  font-weight: 700;
+}
+
+.rank-blue{
+  color: #1f4ed8;
+  font-weight: 700;
+}
+
+.red-down{
+  color: #d62728;
+  font-weight: 800;
+  font-size: 1.05em;
+}
+

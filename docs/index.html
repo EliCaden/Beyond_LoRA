@@ -226,7 +226,6 @@ Lipschitz maps, under bounded input. We therefore view transformer blocks as fit
         <div><strong>σ</strong>: sub-Gaussian parameter of the loss in the mutual-information bound</div>
         <div><strong>|N|</strong>: fine-tuning dataset size</div>
       </div>
-      <p class="caption">cLA and PaCA inherit the same generalization-order dependence, while c<sup>3</sup>LA inherits the chain-length dependence of chained LoRA variants.</p>
     </section>
 
     <section class="bubble">
@@ -238,7 +237,16 @@ Lipschitz maps, under bounded input. We therefore view transformer blocks as fit
         <img src="Table2_Performance.png" alt="Table 2: performance of fine-tuned models" />
       </figure>
       <p class="caption">Performance of fine-tuned models across the past, present, and future PEFT methods.</p>
-
+      <div class="takeaway">
+        <strong>Key takeaways.</strong> No single method substantially outperforms the others for adapting
+the model to their downstream tasks, including FFT. The sparsity-induced SOTA LoRA variants outperform FFT and
+LoRA in some tasks by a large margin and in many cases their performance drop is modest. This suggests
+that when fine-tuning a model for a downstream task, it may be optimal to select a fine-tuning
+method based on its other characteristics and user-specific needs, rather than just the generated
+accuracy. Although the sparse variants do not reduce the number of trainable parameters compared to their non-sparse LoRA
+counterparts, they reduce training time by 5-10% and peak GPU memory by 5-15%, with a naïve,
+non-optimized, sparse implementation.
+      </div>
       <figure class="img-figure wide-figure">
         <img src="Table3_Generalization.png" alt="Table 3: empirical generalization error" />
       </figure>

@@ -253,7 +253,7 @@ non-optimized, sparse implementation.
       <figure class="img-figure wide-figure">
         <img src="Table3_Generalization.png" alt="Table 3: empirical generalization error" />
       </figure>
-      <p class="caption">Empirical generalization error, <span class="math">𝒢(W)</span>, of the fine-tuning methods over various models and datasets. Lower values are better. These values are approximations for how far off the loss of the model obtained on the training set will match the loss of the model on its entire input space (thus when it is deployed).</p>
+      <p class="caption">Empirical generalization error, <span class="math">𝒢(W)</span>, of the fine-tuning methods over various models and datasets. Lower values are better. These values are approximations for how far off the loss of the model obtained on the training set will match the loss of the model on its entire input space (thus its loss in training will better match its loss on any sufficiently large dataset observed in a production environment).</p>
       <div class="takeaway">
       <strong>Key takeaways.</strong> 
       Drawing a connection from our theoretical upper bounds in our LoRA Table in the theoretical section above, we find PEFT methods with the

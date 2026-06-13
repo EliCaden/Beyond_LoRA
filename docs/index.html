@@ -286,8 +286,18 @@ RoBERTa-Base fine-tuned on CoLA (bottom row) with random directions. Note in (b)
       <h2>Closing Takeaways</h2>
       <ul class="takeaway-list">
         <li>PEFT performance is task-dependent: no single fine-tuning method dominates across all models and datasets.</li>
-        <li>Sparse LoRA variants often remain competitive with their parent methods while enabling practical runtime and memory advantages.</li>
-        <li>Our information-theoretic generalizion bounds are more consistent with our empirical tests than loss landscapes or intruder dimensions.</li>
+        <li>Our proposed sparse extensions of SOTA LoRA
+variants perform well across multiple modalities and models while substantially reducing training
+time and memory requirements</li>
+        <li> From a theoretical perspective, our sparsity-induced variants serve
+as a bridge between LoRA and PaCA, two different families of PEFT methods. While these sparse
+variants may require larger budgets to maintain robustness in certain settings, they remain overall effective, highlighting the importance of selecting fine-
+tuning methods based on task characteristics and user constraints</li>
+        <li>We show that, in theory,
+the sparse methods have the same generalization error upper bounds as their non-sparse counterparts,
+and closely track the empirical generalization trend across most models and modalities. This insight
+provides a more consistent and guided pathway for selecting PEFT methods, complementing existing
+diagnostic tools such as loss-landscape and intruder-dimension analyses.</li>
       </ul>
     </section>
 

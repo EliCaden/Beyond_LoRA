@@ -256,14 +256,12 @@ non-optimized, sparse implementation.
       <p class="caption">Empirical generalization error, <span class="math">𝒢(W)</span>, of the fine-tuning methods over various models and datasets. Lower values are better. These values are approximations for how far off the loss of the model obtained on the training set will match the loss of the model on its entire input space (thus when it is deployed).</p>
       <div class="takeaway">
       <strong>Key takeaways.</strong> 
-    <p>
       Drawing a connection from our theoretical upper bounds in our LoRA Table in the theoretical section above, we find PEFT methods with the
       same upper bounds perform similarly in practice. More precisely, cLA has a smaller upper bound on
       <span class="math">𝒢(W)</span> than r-c<sup>3</sup>LA in practice matching the theory. This observation
       also holds for cLA and RAC, and c<sup>3</sup>LA and Asymmetric LoRA pairs. On the other hand, cLA and
       r-cLA have the same upper bound on <span class="math">𝒢(W)</span>, and they also perform almost similarly in practice. Nevertheless, there are some discrepancies, and we attribute them to the fact that Table 1 gives us
       an upper bound on <span class="math">𝒢(W)</span>.
-    </p>
       </div>
     </section>
 

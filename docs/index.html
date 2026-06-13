@@ -231,7 +231,10 @@ Lipschitz maps, under bounded input. We therefore view transformer blocks as fit
     <section class="bubble">
       <h2>Benchmarking and Evaluation</h2>
       <p>
-        The full empirical comparison reports performance and generalization over 11 fine-tuning methods. For CoLA we report the Matthews correlation coefficient (higher is better); for GPT2-small, perplexity (lower is better); and for the remaining datasets, accuracy.
+        The full empirical comparison reports performance and generalization over 11 fine-tuning methods. For CoLA we report the Matthews correlation coefficient (higher is better); for GPT2-small, perplexity (lower is better); and for the remaining datasets, accuracy. We use <span class="rank-green">green</span>, <span class="rank-red">red</span>, and
+  <span class="rank-blue">blue</span> to indicate the best, second best, and third best result.
+  For the sparse variants, <span class="red-down">↓</span> indicates the accuracy drop percentage
+  compared to the best.
       </p>
       <figure class="img-figure wide-figure">
         <img src="Table2_Performance.png" alt="Table 2: performance of fine-tuned models" />

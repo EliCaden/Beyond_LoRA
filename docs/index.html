@@ -85,19 +85,19 @@
       <div class="method-grid">
         <article class="method-card">
           <h3>cLA</h3>
-          <p>Fix <span class="mono">A = [I<sub>r</sub> | 0]</span> and train only <span class="mono">B</span>, restricting adaptation to a deterministic <span class="mono">r</span>-column subspace.</p>
+          <p>Fix <span class="mono">A = [I<sub>r</sub> | 0]</span> and train only <span class="mono">B</span>, restricting adaptation to a deterministic <span class="mono">r</span>-column subspace. After merging the cLA adapter update with the base weights, this produces the same model as using PaCA on the first <span class="mono">r</span> columns of the base weights.</p>
         </article>
         <article class="method-card">
           <h3>random-cLA</h3>
-          <p>Randomize the fixed column selector while still training only <span class="mono">B</span>, spreading the sparse update over a randomized column restriction.</p>
+          <p>Randomize the fixed column selector while still training only <span class="mono">B</span>, spreading the sparse update over a randomized column restriction. This produces the same end model as applying PaCA to a random <span class="mono">r</span> subset of columns of the base weights.</p>
         </article>
         <article class="method-card">
           <h3>c<sup>3</sup>LA</h3>
-          <p>Chain cLA modules and shift the identity block by <span class="mono">r</span> columns across chains, expanding the covered columns of the pretrained layer.</p>
+          <p>Chain cLA modules and shift the identity block by <span class="mono">r</span> columns across chains, expanding the covered columns of the pretrained layer. This produces the same end model as applying PaCA to the first <span class="mono">r</span> columns of the base weights and periodically shifting the updated columns to the next <span class="mono">r</span> throughout training.</p>
         </article>
         <article class="method-card">
           <h3>random-c<sup>3</sup>LA</h3>
-          <p>Combine randomized selectors with the chained cLA construction, yielding a randomized sparse chained update.</p>
+          <p>Combine randomized selectors with the chained cLA construction, yielding a randomized sparse chained update. This produces the same end model as applying PaCA to a random <span class="mono">r</span> subset of columns of the base weights and periodically resampling that subset without replacement thorughout training.</p>
         </article>
       </div>
 

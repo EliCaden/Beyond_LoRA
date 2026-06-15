@@ -282,19 +282,12 @@ turbations. A sharper loss landscape indicates worse generalization, smoother
 landscapes indicate the PEFT method is more robust to initialization. For more details, refer to our paper's appendix, section E.4.1.
   </p>
 
-  <p>
-     In the below Figure, the top row
-shows the loss-landscapes of ViT-Base, pretrained on Imagenet-21K, and fine-tuned on OfficeHome,
-while the bottom row shows the loss-landscapes of RoBERTa-Base, pretrained on a large corpus of
-English data and fine-tuned on CoLA.
-  </p>
-
   <figure class="img-figure">
     <img src="Updated_Teaser_Good.png" alt="Loss landscape comparison across fine-tuning methods" />
   </figure>
 
   <p class="caption">
-    Loss landscapes of ViT-Base fine-tuned on OfficeHome (top row) with PCA directions, and RoBERTa-Base fine-tuned on CoLA (bottom row) with random directions.
+    Loss landscapes of ViT-Base fine-tuned on OfficeHome (top row) with PCA directions, and RoBERTa-Base fine-tuned on CoLA (bottom row) with random directions. For a comparison of the difference between the two methods, see our paper's appendix, section E.4.1.
   </p>
 
   <div class="takeaway">
@@ -312,12 +305,6 @@ and text model modalities.
 and FFT. Given the pretrained and fine-tuned models, <span class="math">W<sub>0</sub></span> and <span class="math">W<sub>0</sub> + ΔW</span>, the number of intruder
 dimensions correlates with their performance on the pretraining task. We ask: Will forgetting less of the more diverse dataset indicate
 better generalizability? 
-  </p>
-
-  <p>
-    In the below Figure, we present the number of intruder dimensions
-present in FFT and various LoRA-based PEFT methods for RoBERTa-Base fine-tuned on CoLA and
-ViT-Base fine-tuned on OfficeHome and CIFAR-10 over varying threshold ranges, <span class="math">ε ∈ (0, 1]</span>.
   </p>
 
   <figure class="img-figure wide-figure">

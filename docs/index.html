@@ -265,20 +265,55 @@ non-optimized, sparse implementation.
       </div>
     </section>
 
-    <section class="bubble">
-      <h2>Diagnostics: When Sharpness and Generalization Disagree</h2>
-      <p>
-        Loss landscapes and intruder dimensions are useful diagnostics, but they do not consistently align with empirical generalization error or test performance. Chain variants often produce sharper landscapes and more intruder dimensions than their non-chain counterparts, but this does not necessarily imply worse empirical generalization.
-      </p>
-      <p>
-        The key takeaway is that these diagnostics can provide useful post hoc explanations, but they can also produce false positives. In this paper, we show that our information-theoretic generalization bounds predict our empirical generalization results (where lower bounds result in lower generalization) more consistently than loss landscapes and intruder dimensions.
-      </p>
-      <figure class="img-figure">
-        <img src="Updated_Teaser_Good.png" alt="Loss landscape comparison across fine-tuning methods" />
-      </figure>
-      <p class="caption">Loss landscapes of ViT-Base fined tuned on OfficeHome (top row) with PCA directions, and
-RoBERTa-Base fine-tuned on CoLA (bottom row) with random directions. Note in (b) and (c) where RAC-LoRA produces a spikier landscape than LoRA while reporting better generalization error empirically. This better generalization is predicted by our information-theoretic bounds (for the chain length we ran in this experiment), as only training the <span class="mono">B</span>-matrix reduces the bound.</p>
-    </section>
+<section class="bubble">
+  <h2>Other Generalization Diagnostic Tools: Loss Landscapes</h2>
+
+  <p>
+    Loss landscapes are a common analytical tool for visualizing how the empirical loss changes under perturbations of a fine-tuned model's parameters. In the standard interpretation, flatter landscapes are often associated with better generalization, while sharper landscapes are often interpreted as a sign that the model may be more sensitive to parameter perturbations.
+  </p>
+
+  <p>
+    We use 3D loss landscapes to compare the geometry induced by different fine-tuning methods. For ViT-Base fine-tuned on OfficeHome, we visualize the landscape using PCA directions; for RoBERTa-Base fine-tuned on CoLA, we use random directions. These plots let us compare non-chain methods against their chained counterparts, including LoRA/RAC-LoRA and Asymmetric LoRA/c<sup>3</sup>LA.
+  </p>
+
+  <figure class="img-figure">
+    <img src="Updated_Teaser_Good.png" alt="Loss landscape comparison across fine-tuning methods" />
+  </figure>
+
+  <p class="caption">
+    Loss landscapes of ViT-Base fine-tuned on OfficeHome (top row) with PCA directions, and RoBERTa-Base fine-tuned on CoLA (bottom row) with random directions.
+  </p>
+
+  <div class="takeaway">
+    <strong>Key takeaway.</strong>
+    The loss-landscape heuristic does not consistently align with empirical generalization in our experiments. Chain methods such as RAC-LoRA, CoLA, and c<sup>3</sup>LA often produce sharper landscapes than their non-chain counterparts, which would normally suggest worse generalization. However, this is not always what we observe empirically: in several cases, sharper chain methods still obtain competitive or better empirical <span class="math">𝒢(W)</span> and test performance. This motivates comparing loss landscapes against both the empirical generalization table and our theoretical upper bounds rather than treating sharpness as a standalone criterion.
+  </div>
+</section>
+
+<section class="bubble">
+  <h2>Other Generalization Diagnostic Tools: Intruder Dimensions</h2>
+
+  <p>
+    Intruder dimensions provide another analytical tool for comparing pretrained and fine-tuned models. Given a pretrained model <span class="mono">W<sub>0</sub></span> and a fine-tuned model <span class="mono">W<sub>0</sub> + ΔW</span>, the method compares their singular-vector structure. Intuitively, an intruder dimension is a singular direction of the fine-tuned model that is nearly orthogonal to the corresponding singular directions of the pretrained model.
+  </p>
+
+  <p>
+    The motivation is that introducing many new directions may indicate that the fine-tuned model has moved far away from the pretrained representation, potentially forgetting more of the original model's pretraining behavior. Under this heuristic, more intruder dimensions should correspond to worse retention and potentially worse generalization.
+  </p>
+
+  <figure class="img-figure wide-figure">
+    <img src="Intruder_Dimensions_horizontal.png" alt="Intruder dimension counts across fine-tuned models" />
+  </figure>
+
+  <p class="caption">
+    Average number of intruder dimensions present in different fine-tuned models at the end of training. The panels compare RoBERTa-Base fine-tuned on CoLA, ViT-Base fine-tuned on OfficeHome, and ViT-Base fine-tuned on CIFAR-10 over varying cosine similarity thresholds <span class="math">ε ∈ (0, 1]</span>.
+  </p>
+
+  <div class="takeaway">
+    <strong>Key takeaway.</strong>
+    Intruder dimensions are useful for diagnosing how far a fine-tuned model moves from the pretrained representation, but they do not always match the empirical generalization error <span class="math">𝒢(W)</span>. In our experiments, chain variants generally produce more intruder dimensions than their non-chain counterparts, consistent with the sharper loss landscapes observed above. However, the expected worse generalization of these chain methods is not always observed empirically. Overall, intruder dimensions are informative, but our theoretical bounds and empirical generalization measurements provide a more consistent guide for comparing PEFT methods.
+  </div>
+</section>
 
     <section class="bubble">
       <h2>Closing Takeaways</h2>

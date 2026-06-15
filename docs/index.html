@@ -239,6 +239,9 @@ Lipschitz maps, under bounded input. We therefore view transformer blocks as fit
   For the sparse variants, <span class="red-down">↓</span> indicates the accuracy drop percentage
   compared to the best.
       </p>
+      <p>
+        Here, FFT denotes full fine-tuning, LoRA is the standard low-rank adapter baseline, CoLA its chained counterpart. Asymmetric LoRA trains only one low-rank factor (<span class="mono">B</span>), and freezes <span class="mono">A</span>. RAC is its chained counterpart. cLA/c<sup>3</sup>LA and their random variants are ours (see the methods section above).
+      </p>
       <figure class="img-figure wide-figure">
         <img src="Table2_Performance.png" alt="Table 2: performance of fine-tuned models" />
       </figure>

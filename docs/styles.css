@@ -272,4 +272,15 @@ code{ font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liber
   font-style: italic;
 }
 
+.one-line-title{
+  white-space: nowrap;
+  font-size: clamp(20px, 2.45vw, 34px);
+}
+
+@media (max-width: 900px){
+  .one-line-title{
+    white-space: normal;
+    font-size: clamp(24px, 5vw, 36px);
+  }
+}
 

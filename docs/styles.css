@@ -267,3 +267,9 @@ code{ font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liber
   font-size: 1.05em;
 }
 
+.math{
+  font-family: "Source Serif 4", Georgia, serif;
+  font-style: italic;
+}
+
+

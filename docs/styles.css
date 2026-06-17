@@ -284,3 +284,7 @@ code{ font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liber
   }
 }
 
+.red-tagline{
+  color: #d62728;
+}
+

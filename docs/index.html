@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Beyond LoRA: Is Sparsity-Induced Adaptation Better?</title>
-  <link rel="stylesheet" href="styles.css?v=11" />
+  <link rel="stylesheet" href="styles.css?v=12" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;600;700&display=swap" rel="stylesheet">
@@ -28,7 +28,7 @@
         <p><sup>2</sup><a href="https://um6p.ma/en">Mohammed VI Polytechnic University</a></p>
       </div>
 
-      <p class="tagline">Sparse, structured LoRA variants for cheaper and competitive parameter-efficient fine-tuning.</p>
+      <p class="tagline red-tagline">Sparse, structured LoRA variants for cheaper and competitive parameter-efficient fine-tuning</p>
     
     <div class="hero-links">
       <a class="paper-link" href="https://arxiv.org/pdf/2606.13767">[Paper]</a>
@@ -88,19 +88,19 @@
       <div class="method-grid">
         <article class="method-card">
           <h3>cLA</h3>
-          <p>Fix <span class="mono">A = [I<sub>r</sub> | 0]</span> and train only <span class="mono">B</span>, restricting adaptation to a deterministic <span class="mono">r</span>-column subspace. After merging the cLA adapter update with the base weights, this produces the same model as using PaCA on the first <span class="mono">r</span> columns of the base weights.</p>
+          <p>Fix <span class="mono">A = [I<sub>r</sub> | 0]</span> and train only <span class="mono">B</span>, restricting adaptation to a deterministic <span class="mono">r</span>-column subspace.</p>
         </article>
         <article class="method-card">
           <h3>random-cLA</h3>
-          <p>Randomize the fixed column selector while still training only <span class="mono">B</span>, spreading the sparse update over a randomized column restriction. This produces the same end model as applying PaCA to a random <span class="mono">r</span> subset of columns of the base weights.</p>
+          <p>Randomize the fixed column selector while still training only <span class="mono">B</span>, spreading the sparse update over a randomized column restriction.</p>
         </article>
         <article class="method-card">
           <h3>c<sup>3</sup>LA</h3>
-          <p>Chain cLA modules and shift the identity block by <span class="mono">r</span> columns across chains, expanding the covered columns of the pretrained layer. This produces the same end model as applying PaCA to the first <span class="mono">r</span> columns of the base weights and periodically shifting the updated columns to the next <span class="mono">r</span> throughout training.</p>
+          <p>Chain cLA modules and shift the identity block by <span class="mono">r</span> columns across chains, expanding the covered columns of the pretrained layer.</p>
         </article>
         <article class="method-card">
           <h3>random-c<sup>3</sup>LA</h3>
-          <p>Combine randomized selectors with the chained cLA construction, yielding a randomized sparse chained update. This produces the same end model as applying PaCA to a random <span class="mono">r</span> subset of columns of the base weights and periodically resampling that subset without replacement thorughout training.</p>
+          <p>Combine randomized selectors with the chained cLA construction, yielding a randomized sparse chained update.</p>
         </article>
       </div>
 

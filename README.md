@@ -39,7 +39,7 @@
 
 ## Latest Updates
 
-- **Jun 2026** — Paper, project page, and code released: [Project Page](https://elicaden.github.io/Beyond_LoRA/) · [Paper](https://arxiv.org/pdf/2606.13767) · [arXiv](https://arxiv.org/abs/2606.13767) · [Code](https://github.com/EliCaden/Beyond_LoRA)
+* **Jun 2026** — Paper, project page, and code released: [Project Page](https://elicaden.github.io/Beyond_LoRA/) · [Paper](https://arxiv.org/pdf/2606.13767) · [arXiv](https://arxiv.org/abs/2606.13767)
 
 ---
 
@@ -53,22 +53,42 @@ We frame cLA as a structured instance of asymmetric LoRA, serving as a controlle
 
 ### Key Contributions
 
-| Contribution | Summary |
-|---|---|
-| **Sparse LoRA Variants** | We introduce cLA, random-cLA, c<sup>3</sup>LA, and random-c<sup>3</sup>LA as simple, sparse extensions of state-of-the-art LoRA variants. These methods train restricted column-subspace updates by fixing part of the low-rank structure, thereby separating trainable parameter count from update geometry. |
-| **Generalization Bounds** | We derive information-theoretic generalization bounds for LoRA-family updates. The resulting framework connects rank, chain length, layer dimensions, bitwidth, dataset size, and update support to the generalization behavior of fine-tuned models. |
-| **Benchmarking and Evaluation** | We benchmark 11 fine-tuning methods across 10 pretrained models and 14 datasets spanning NLP, vision, code generation, and logical reasoning, while measuring accuracy, empirical generalization, loss landscapes, spectral behavior, runtime, throughput, and memory. |
+| Contribution                    | Summary                                                                                                                                                                                                                                                                                                       |
+| ------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Sparse LoRA Variants**        | We introduce cLA, random-cLA, c<sup>3</sup>LA, and random-c<sup>3</sup>LA as simple, sparse extensions of state-of-the-art LoRA variants. These methods train restricted column-subspace updates by fixing part of the low-rank structure, thereby separating trainable parameter count from update geometry. |
+| **Generalization Bounds**       | We derive information-theoretic generalization bounds for LoRA-family updates. The resulting framework connects rank, chain length, layer dimensions, bitwidth, dataset size, and update support to the generalization behavior of fine-tuned models.                                                         |
+| **Benchmarking and Evaluation** | We benchmark 11 fine-tuning methods across 10 pretrained models and 14 datasets spanning NLP, vision, code generation, and logical reasoning, while measuring accuracy, empirical generalization, loss landscapes, spectral behavior, runtime, throughput, and memory.                                        |
 
 ---
 
 ## Overview of Proposed Sparsity-Induced LoRA Variants
 
-| Method | High-level idea |
-|---|---|
-| `cLA` | Fix `A = [I_r | 0]` and train only `B`, restricting adaptation to a deterministic `r`-column subspace. |
-| `random-cLA` | Randomize the fixed column selector while still training only `B`, spreading the sparse update over a randomized column restriction. |
-| `c³LA` | Chain cLA modules and shift the identity block by `r` columns across chains, expanding the covered columns of the pretrained layer. |
-| `random-c³LA` | Combine randomized selectors with the chained cLA construction, yielding a randomized sparse chained update. |
+<table>
+  <thead>
+    <tr>
+      <th>Method</th>
+      <th>High-level idea</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>cLA</code></td>
+      <td>Fix <code>A = [I_r | 0]</code> and train only <code>B</code>, restricting adaptation to a deterministic <code>r</code>-column subspace.</td>
+    </tr>
+    <tr>
+      <td><code>random-cLA</code></td>
+      <td>Randomize the fixed column selector while still training only <code>B</code>, spreading the sparse update over a randomized column restriction.</td>
+    </tr>
+    <tr>
+      <td><code>c<sup>3</sup>LA</code></td>
+      <td>Chain cLA modules and shift the identity block by <code>r</code> columns across chains, expanding the covered columns of the pretrained layer.</td>
+    </tr>
+    <tr>
+      <td><code>random-c<sup>3</sup>LA</code></td>
+      <td>Combine randomized selectors with the chained cLA construction, yielding a randomized sparse chained update.</td>
+    </tr>
+  </tbody>
+</table>
 
 ### Algorithms
 
@@ -89,7 +109,7 @@ For each training step:
   Update B ← B − η · ∇_B L
 
 Return adapted layer W
-````
+```
 
 </details>
 
@@ -199,15 +219,44 @@ With the additional assumption that the loss function `ℓ(·)` is `σ`-sub-Gaus
 
 Notation:
 
-| Symbol | Meaning                                                            |   |                          |
-| ------ | ------------------------------------------------------------------ | - | ------------------------ |
-| `m_i`  | input dimension of layer `i`                                       |   |                          |
-| `n_i`  | output dimension of layer `i`                                      |   |                          |
-| `r`    | adapter rank                                                       |   |                          |
-| `k`    | chain length                                                       |   |                          |
-| `q`    | bitwidth of the stored weights                                     |   |                          |
-| `σ`    | sub-Gaussian parameter of the loss in the mutual-information bound |   |                          |
-| `      | N                                                                  | ` | fine-tuning dataset size |
+<table>
+  <thead>
+    <tr>
+      <th>Symbol</th>
+      <th>Meaning</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>m_i</code></td>
+      <td>input dimension of layer <code>i</code></td>
+    </tr>
+    <tr>
+      <td><code>n_i</code></td>
+      <td>output dimension of layer <code>i</code></td>
+    </tr>
+    <tr>
+      <td><code>r</code></td>
+      <td>adapter rank</td>
+    </tr>
+    <tr>
+      <td><code>k</code></td>
+      <td>chain length</td>
+    </tr>
+    <tr>
+      <td><code>q</code></td>
+      <td>bitwidth of the stored weights</td>
+    </tr>
+    <tr>
+      <td><code>σ</code></td>
+      <td>sub-Gaussian parameter of the loss in the mutual-information bound</td>
+    </tr>
+    <tr>
+      <td><code>|N|</code></td>
+      <td>fine-tuning dataset size</td>
+    </tr>
+  </tbody>
+</table>
 
 ---
 
@@ -611,6 +660,14 @@ For offline or restricted cluster runs, use:
 ```
 
 `ProjectModelsTwo` trainers print epoch-level train/validation/test metrics in the terminal.
+
+---
+
+## License
+
+This work is licensed under the [Creative Commons Attribution 4.0 International License](https://creativecommons.org/licenses/by/4.0/).
+
+You are free to share and adapt the material for any purpose, provided that appropriate credit is given. Please cite the paper when using this repository, figures, or results in academic work.
 
 ---
 

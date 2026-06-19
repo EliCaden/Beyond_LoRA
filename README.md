@@ -676,7 +676,7 @@ You are free to share and adapt the material for any purpose, provided that appr
 If this repository is useful for your work, please cite the accompanying paper:
 
 ```bibtex
-@article{beyondlora,
+@misc{beyondlora,
   title={Beyond LoRA: Is Sparsity-Induced Adaptation Better?},
   author={Cadenhead, Elijah and McGee, Cristian and Li, Xin and Bergou, El Houcine and Dutta, Aritra},
   journal={arXiv preprint arXiv:2606.13767},

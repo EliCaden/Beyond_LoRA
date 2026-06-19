@@ -10,9 +10,6 @@
   <a href="https://arxiv.org/abs/2606.13767">
     <img src="https://img.shields.io/badge/arXiv-2606.13767-b31b1b?style=for-the-badge" alt="arXiv">
   </a>
-  <a href="https://github.com/EliCaden/Beyond_LoRA">
-    <img src="https://img.shields.io/badge/Code-GitHub-black?style=for-the-badge&logo=github" alt="Code">
-  </a>
 </p>
 
 <p align="center">

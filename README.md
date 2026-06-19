@@ -329,10 +329,10 @@ For offline or restricted cluster runs, use:
 If this repository is useful for your work, please cite the accompanying paper:
 
 ```bibtex
-@misc{beyondlora,
-  title  = {Beyond LoRA: Is Sparsity-Induced Adaptation Better?},
-  author = {Cadenhead, Elijah and McGee, Cristian and Li, Xin and Bergou, El Houcine and Dutta, Aritra},
-  year   = {2026},
-  note   = {Preprint}
+@article{beyondlora,
+  title={Beyond LoRA: Is Sparsity-Induced Adaptation Better?},
+  author={Cadenhead, Elijah and McGee, Cristian and Li, Xin and Bergou, El Houcine and Dutta, Aritra},
+  journal={arXiv preprint arXiv:2606.13767},
+  year={2026}
 }
 ```
